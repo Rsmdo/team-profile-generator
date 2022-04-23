@@ -6,3 +6,10 @@ test('create engineer obj', () => {
     
     expect(engineer.github) .toEqual(expect.any(String));
 });
+test('gets github username and sets role', () => {
+    const engineer = new Engineer('Jerry', 60, 'jerrytom@gmail.com', 'jrytom');
+
+    expect(engineer.inputGithub()).toEqual(expect.any(String));
+    expect(engineer.role()).toEqual("Engineer");
+});
+
