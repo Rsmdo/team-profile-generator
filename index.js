@@ -3,6 +3,7 @@ const fs = require("fs");
 const Engineer = require("./lib/Engineer.js");
 const Intern = require("./lib/Intern.js");
 const Manager = require("./lib/Manager.js");
+const { connected } = require("process");
 
 
 const employees = [];
@@ -100,9 +101,15 @@ const inputEmployee = () => {
             }
             }
         },
+        {
+            type: 'confirm',
+            name: 'confirmAddEmployee',
+            message: 'Would you like to add more team members?',
+            default: false
+        },
     ])
     .then(memberAdded => {
-        const {name, id, email} =memberAdded;
+        let { name, id, email, role, github, school, confirmAddEmployee } = memberAdded;
         let employeeToAdd;
         if (inputEmployee.role === "Manager"){
             const manager = new Manager (name, id, email, officeNumber); 
@@ -111,10 +118,19 @@ const inputEmployee = () => {
         }else if (inputEmployee.role === 'Intern') {
             const intern = new Intern(name, id, email, school);
         }
-        employees.push(employeeToAdd);
-        console.log("================ Team member INPUTS ARE BELOW ===============");
-        console.log(memberAdded);
+        employees.push(memberAdded);
+
+        if (memberAdded.confirmAddEmployee){
+            return inputEmployee(employees);
+        } else {
+            console.log("================ Team member INPUTS ARE BELOW ===============");
+            console.log(employees);
+
+        }
+
+
     })
+    
 };
 
 inputEmployee();
