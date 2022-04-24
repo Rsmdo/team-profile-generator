@@ -201,31 +201,59 @@ const otherEmployees = () => {
             default: false
         }
     ])
-}
+    .then(employeeInput => {
 
 
+        let { name, id, email, role, github, school, confirm } = employeeInput; 
+        let employee; 
+
+        if (role === "Engineer") {
+            employee = new Engineer (name, id, email, github);
+
+ 
+
+        } else if (role === "Intern") {
+            employee = new Intern (name, id, email, school);
 
 
-const writeFile = data => {
-    fs.writeFile('./dist/index.html', data, err => {
-        // if there is an error 
-        if (err) {
-            console.log(err);
-            return;
-        // when the profile has been created 
+        }
+        console.log("====================Employee Inputs below====================================");
+        console.log(employee);
+
+        employees.push(employee); 
+
+        if (confirm) {
+            return otherEmployees(employees); 
         } else {
-            console.log("Your team profile has been successfully created! Please check out the index.html")
+            return employees;
         }
     })
-}; 
+};
 
-inputEmployee()
-  .then(employees => {
-    return generateHTML(employees);
-  })
-  .then(pageHTML => {
-    return writeFile(pageHTML);
-  })
-  .catch(err => {
- console.log(err);
-  });
+
+
+
+// const writeFile = data => {
+//     fs.writeFile('./dist/index.html', data, err => {
+
+//         if (err) {
+//             console.log(err);
+//             return;
+
+//         } else {
+//             console.log("Your team profile has been created, checkout the index.html file")
+//         }
+//     })
+// }; 
+
+managerInput()
+ .then(otherEmployees) //check to see it works in order 
+//   .then(employees => {
+//     return generateHTML(employees);
+//   })
+//   .then(pageHTML => {
+//     return writeFile(pageHTML);
+//   })
+//   .catch(err => {
+//  console.log(err);
+//   });
