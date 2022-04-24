@@ -233,27 +233,27 @@ const otherEmployees = () => {
 
 
 
-// const writeFile = data => {
-//     fs.writeFile('./dist/index.html', data, err => {
+const writeFile = data => {
+     fs.writeFile('./dist/index.html', data, err => {
 
-//         if (err) {
-//             console.log(err);
-//             return;
+         if (err) {
+             console.log("this is hte write file error ", err);
+             return;
 
-//         } else {
-//             console.log("Your team profile has been created, checkout the index.html file")
-//         }
-//     })
-// }; 
+         } else {
+             console.log("Your team profile has been created, checkout the index.html file")
+         }
+     })
+}; 
 
 managerInput()
  .then(otherEmployees) //check to see it works in order 
-//   .then(employees => {
-//     return generateHTML(employees);
-//   })
-//   .then(pageHTML => {
-//     return writeFile(pageHTML);
-//   })
-//   .catch(err => {
-//  console.log(err);
-//   });
+   .then(employees => {
+     return generateHTML(employees);
+   })
+   .then(pageHTML => {
+     return writeFile(pageHTML);
+   })
+   .catch(err => {
+  console.log("this error is from the block init function code", err);
+   });
