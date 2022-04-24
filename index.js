@@ -3,7 +3,10 @@ const fs = require("fs");
 const Engineer = require("./lib/Engineer.js");
 const Intern = require("./lib/Intern.js");
 const Manager = require("./lib/Manager.js");
-const { connected } = require("process");
+
+const generateHTML = require('./src/generateHTML');
+
+
 
 
 const employees = [];
@@ -109,10 +112,11 @@ const inputEmployee = () => {
         },
     ])
     .then(memberAdded => {
-        let { name, id, email, role, github, school, confirmAddEmployee } = memberAdded;
-        let employeeToAdd;
+        let { name, id, email, role, github, school, officeNumber, confirmAddEmployee } = memberAdded;
+        let employee;
         if (inputEmployee.role === "Manager"){
             const manager = new Manager (name, id, email, officeNumber); 
+            
         }else if (inputEmployee.role  === 'Engineer') {
             const engineer = new Engineer (name, id, email, github);
         }else if (inputEmployee.role === 'Intern') {
@@ -132,5 +136,26 @@ const inputEmployee = () => {
     })
     
 };
+const writeFile = data => {
+    fs.writeFile('./dist/index.html', data, err => {
+        // if there is an error 
+        if (err) {
+            console.log(err);
+            return;
+        // when the profile has been created 
+        } else {
+            console.log("Your team profile has been successfully created! Please check out the index.html")
+        }
+    })
+}; 
 
-inputEmployee();
+inputEmployee()
+  .then(employees => {
+    return generateHTML(employees);
+  })
+  .then(pageHTML => {
+    return writeFile(pageHTML);
+  })
+  .catch(err => {
+ console.log(err);
+  });
