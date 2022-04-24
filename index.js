@@ -11,39 +11,40 @@ const generateHTML = require('./src/generateHTML');
 
 const employees = [];
 
-const inputEmployee = () => {
+const managerInput = () => {
     return inquirer.prompt ([
         { 
             type: 'input', 
             name: 'name', 
-            message: '(REQUIRED) Who is your team member?' , 
+            message: '(REQUIRED) Who is your Team Manager name?' , 
             validate: nameInput => {
             if (nameInput) {
                 return true;
             } else {
-                console.log ("Please enter your team members name");
+                console.log ("Please enter your Team Managers name");
                 return false; 
             }
             }
         },
         {
-            type: "list",
-            message: "Select team member's role",
-            choices: [
-                "Engineer",
-                "Intern",
-                "Manager"
-            ],
-            name: "role",
-            default: true
+            type: 'input',
+            name: 'id',
+            message: "(REQUIRED)Please enter your Team managers id",
+            validate: managerInput => {
+                if  (managerInput) {
+                    return true; 
+                } else {
+                    console.log ("Please enter the manager's id number")
+                    return false;
+                }
+            }
         },
         { 
             type: 'input', 
             name: 'officeNumber', 
             message: '(REQUIRED) What is your Managers office number?' , 
-            when: (input) => input.role === "Manager",
-            validate: nameInput => {
-                if (nameInput ) {
+            validate: officeInput => {
+                if (officeInput ) {
                     return true;
                 } else {
                     console.log ("Please enter the Manager office number")
@@ -51,37 +52,37 @@ const inputEmployee = () => {
             }
             
         },
-        { 
-            type: 'input', 
-            name: 'school', 
-            message: '(REQUIRED) What is your Interns school' , 
-            when: (input) => input.role === "Intern",
-            validate: nameInput => {
-                if (nameInput ) {
-                    return true;
-                } else {
-                    console.log ("Please enter The Interns School")
-                }
-            }
-        },
-        { 
-            type: 'input', 
-            name: 'github', 
-            message: '(REQUIRED) What is your team members github username?' , 
-            when: (input) => input.role === "Engineer",
-            validate: nameInput => {
-                if (nameInput ) {
-                    return true;
-                } else {
-                    console.log ("Please enter the Engineers github username")
-                }
-            }
-        },
+        // { 
+        //     type: 'input', 
+        //     name: 'school', 
+        //     message: '(REQUIRED) What is your Interns school' , 
+        //     when: (input) => input.role === "Intern",
+        //     validate: nameInput => {
+        //         if (nameInput ) {
+        //             return true;
+        //         } else {
+        //             console.log ("Please enter The Interns School")
+        //         }
+        //     }
+        // },
+        // { 
+        //     type: 'input', 
+        //     name: 'github', 
+        //     message: '(REQUIRED) What is your team members github username?' , 
+        //     when: (input) => input.role === "Engineer",
+        //     validate: nameInput => {
+        //         if (nameInput ) {
+        //             return true;
+        //         } else {
+        //             console.log ("Please enter the Engineers github username")
+        //         }
+        //     }
+        // },
         
         { 
             type: 'input', 
             name: 'email', 
-            message: '(REQUIRED) What is your team members email?' , 
+            message: '(REQUIRED) What is your Managers email?' , 
             validate: emailInput => {
             if (emailInput) {
                 return true;
@@ -94,48 +95,117 @@ const inputEmployee = () => {
         { 
             type: 'input', 
             name: 'id', 
-            message: '(REQUIRED) Please enter your team members id?' , 
+            message: '(REQUIRED) Please enter your Managers id?' , 
             validate: idInput => {
             if (idInput) {
                 return true;
             } else {
-                console.log ("Please enter your manager's office number");
+                console.log ("Please enter your manager's id number");
                 return false; 
             }
             }
-        },
-        {
-            type: 'confirm',
-            name: 'confirmAddEmployee',
-            message: 'Would you like to add more team members?',
-            default: false
-        },
+        }
     ])
-    .then(memberAdded => {
-        let { name, id, email, role, github, school, officeNumber, confirmAddEmployee } = memberAdded;
-        let employee;
-        if (inputEmployee.role === "Manager"){
-            const manager = new Manager (name, id, email, officeNumber); 
-            
-        }else if (inputEmployee.role  === 'Engineer') {
-            const engineer = new Engineer (name, id, email, github);
-        }else if (inputEmployee.role === 'Intern') {
-            const intern = new Intern(name, id, email, school);
-        }
-        employees.push(memberAdded);
+    .then(managerAdded => {
+        const  { name, id, email, officeNumber } = managerAdded; 
+        const manager = new Manager (name, id, email, officeNumber);
 
-        if (memberAdded.confirmAddEmployee){
-            return inputEmployee(employees);
-        } else {
-            console.log("================ Team member INPUTS ARE BELOW ===============");
-            console.log(employees);
+        employees.push(manager); 
+ 
 
-        }
-
+        console.log("================ This is Your Manager INPUTS ===============");
+        console.log(manager);
 
     })
     
 };
+
+const otherEmployees = () => {
+    return inquirer.prompt ([
+        {
+            type: 'input',
+            name: 'name',
+            message: " (REQUIRED)What's the name of your employee", 
+            validate: nameInput => {
+                if (nameInput) {
+                    return true;
+                } else {
+                    console.log ("Please enter a name");
+                    return false; 
+                }
+            }
+        },
+        {
+            type: 'list',
+            name: 'role',
+            message: " (REQUIRED)Choose your employee's role",
+            choices: ['Engineer', 'Intern']
+        },
+
+        {
+            type: 'input',
+            name: 'id',
+            message: "(REQUIRED) Enter your employee id.",
+            validate: idInput => {
+                if  (idInput) {
+                    return true; 
+                } else {
+                    console.log ("Please enter id number")
+                    return false;
+                }
+            }
+        },
+        {
+            type: 'input',
+            name: 'email',
+            message: "(REQUIRED) enter the employee's email.",
+            validate: emailInput => {
+                if (emailInput) {
+                    return true;
+                } else {
+                    console.log ("Please enter youremployee email ");
+                    return false; 
+                }
+                }
+        },
+        {
+            type: 'input',
+            name: 'github',
+            message: "(REQUIRED) enter the employee's github username.",
+            when: (input) => input.role === "Engineer",
+            validate: nameInput => {
+                if (nameInput ) {
+                    return true;
+                } else {
+                    console.log ("Enter engineer github user name")
+                }
+            }
+        },
+        {
+            type: 'input',
+            name: 'school',
+            message: "(REQUIRED) enter the intern's school",
+            when: (input) => input.role === "Intern",
+            validate: nameInput => {
+                if (nameInput) {
+                    return true;
+                } else {
+                    console.log ("enter interns school")
+                }
+            }
+        },
+        {
+            type: 'confirm',
+            name: 'confim',
+            message: 'Would you like to add more team members?',
+            default: false
+        }
+    ])
+}
+
+
+
+
 const writeFile = data => {
     fs.writeFile('./dist/index.html', data, err => {
         // if there is an error 
