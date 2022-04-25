@@ -241,7 +241,7 @@ const writeFile = data => {
              return;
 
          } else {
-             console.log("Your team profile has been created, checkout the index.html file")
+             console.log("Your team profile has been created, checkout the index.html file in the dist folder")
          }
      })
 }; 
