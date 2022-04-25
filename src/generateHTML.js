@@ -87,5 +87,41 @@ const internCard = function (intern) {
     </div>
     `
 };
+generateHTML = (data) => {
 
+    cardArray = []; 
+
+    for (let i = 0; i < data.length; i++) {
+        const employee = data[i]; //reads data collected from index
+        const role = employee.role(); 
+
+
+        // call manager function
+        if (role === 'Manager') {
+            const manager = managerCard(employee);
+
+            cardArray.push(manager);
+        }
+
+
+        if (role === 'Engineer') {
+            const engineer = engineerCard(employee);
+
+            cardArray.push(engineer);
+        }
+
+        if (role === 'Intern') {
+            const intern = internCard(employee);
+
+            cardArray.push(intern);
+        }
+        
+    }
+
+    const teamCards = cardArray.join('')
+
+    const generateTeam = addHtml(teamCards); 
+    return generateTeam;
+
+}
 module.exports = generateHTML; 
